@@ -1,5 +1,10 @@
 # coding=utf-8
 
+from os import urandom
+
+import ed25519
+
+
 # Retourne la cle privé ou publique pour une entrée
 def getkey(id, type):
     keystore = open("keystore", "r")
@@ -9,3 +14,17 @@ def getkey(id, type):
             key = ligne_suiv.split(":")
             if key[0] == id:
                 return key[2]
+
+
+def genKeys(id):
+    keystore = open("keystore", "a")
+    # géneration de la clé publique et de la clé privée
+
+    sk = urandom(256 / 8).encode('hex')
+    pk = ed25519.publickey(sk).encode('hex')
+
+    # impression de la clé publique
+    keystore.write("[pub]\n" + id + ":DSA-Ed25519-SHA-512:" + pk + "\n")
+
+    # imporession de la clé privée
+    keystore.write("[sec]\n" + id + ":DSA-Ed25519-SHA-512:" + sk + "\n")
