@@ -27,9 +27,6 @@ parser.add_argument('-export', dest='export',
 
 args = parser.parse_args()
 
-# affichage des arguments dans le terminal
-print(args)
-
 if args.genKey and args.id:
     # action à implémenter : appeler la fonction de géneration des clés qui stocke dans le keystore
     print "géneration des clés pour " + args.id
@@ -47,8 +44,13 @@ if args.genKey and args.id:
     keystore.write("[sec]\n" + args.id + ":DSA-Ed25519-SHA-512:" + sk + "\n")
 
 if args.export and args.id:
-    keystore = open("keystore", "a")
     if args.export == 'pub' or args.export == 'sec':
-        print "affiche la clé " + args.export + " de " + args.id
+        keystore = open("keystore", "r")
+        # on cherche dans les clés publiques ou privés avec le bon id
+        for ligne in keystore:
+            if args.export in ligne:
+                ligne_suiv = keystore.next()
+                key = ligne_suiv.split(":")
+                print key[2]
     else:
         print args.export + " est une mauvaise option pour l'argument -export"
