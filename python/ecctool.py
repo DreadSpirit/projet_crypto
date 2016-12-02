@@ -24,10 +24,10 @@ args = parser.parse_args()
 # affichage des arguments dans le terminal
 print(args)
 
-if args.genKey:
+if args.genKey and args.id:
     # action à implémenter : appeler la fonction de géneration des clés qui stocke dans le keystore
     print "géneration de clés"
-
-if args.id:
-    # action à implémenter : enregistrer l'id pour cette paire de clé
     print "id : " + args.id
+
+    fichier = open("keystore", "a")
+    fichier.write(id + ":")
