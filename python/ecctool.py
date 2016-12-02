@@ -1,6 +1,8 @@
 # coding=utf-8
 import argparse
 
+import ed25519
+
 # Déscription du scrit :
 # On utilise un parser pour manipuler les arguments qu'on obtient via un terminal.
 # C'est le point d'entrée de notre programme.
@@ -30,4 +32,8 @@ if args.genKey and args.id:
     print "id : " + args.id
 
     fichier = open("keystore", "a")
-    fichier.write(id + ":")
+    # récuperation de la clé public
+    str = ed25519.publickey(32 * chr(0)).encode('hex')
+
+    # impression de la clé dans un fichier
+    fichier.write(args.id + ": " + str + "\n")
