@@ -3,6 +3,7 @@ import argparse
 from os import urandom
 
 import ed25519
+import gestionKeystore as gk
 
 # Déscription du scrit :
 # On utilise un parser pour manipuler les arguments qu'on obtient via un terminal.
@@ -22,11 +23,12 @@ parser.add_argument('-genKey', action='store_true',
 parser.add_argument('-id', dest='id', required=True,
                     help='id de la personne')
 
-parser.add_argument('-export', dest='export',
+parser.add_argument('-export', dest='typeKey',
                     help='-export [pub|sec], exporte la clé publique/privé')
 
 args = parser.parse_args()
 
+# Géneration des clés
 if args.genKey and args.id:
     # action à implémenter : appeler la fonction de géneration des clés qui stocke dans le keystore
     print "géneration des clés pour " + args.id
@@ -43,14 +45,13 @@ if args.genKey and args.id:
     # imporession de la clé privée
     keystore.write("[sec]\n" + args.id + ":DSA-Ed25519-SHA-512:" + sk + "\n")
 
-if args.export and args.id:
-    if args.export == 'pub' or args.export == 'sec':
-        keystore = open("keystore", "r")
-        # on cherche dans les clés publiques ou privés avec le bon id
-        for ligne in keystore:
-            if args.export in ligne:
-                ligne_suiv = keystore.next()
-                key = ligne_suiv.split(":")
-                print key[2]
+# Affiche de clés
+if args.typeKey and args.id:
+    if args.typeKey == 'pub' or args.typeKey == 'sec':
+        key = gk.getkey(args.id, args.typeKey)
+        if key:
+            print key
+        else:
+            print "Pas d'entrée trouvé pour " + args.id
     else:
-        print args.export + " est une mauvaise option pour l'argument -export"
+        print args.typeKey + " est une mauvaise option pour l'argument -export"
