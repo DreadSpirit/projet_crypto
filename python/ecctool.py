@@ -17,10 +17,13 @@ parser = argparse.ArgumentParser(description='Géneration de clés ... A complé
 
 # premier argument : genKey; Ne requière pas d'option; args.genKey = true si invoqué
 parser.add_argument('-genKey', action='store_true',
-                    help='genère une paire de clés publique et privée ')
+                    help='génere une paire de clés publique et privée ')
 # deuxième argument : id; Requière une option derrière: option requis pour executer la commande;
 parser.add_argument('-id', dest='id', required=True,
                     help='id de la personne')
+
+parser.add_argument('-export', dest='export',
+                    help='-export [pub|sec], exporte la clé publique/privé')
 
 args = parser.parse_args()
 
@@ -42,3 +45,10 @@ if args.genKey and args.id:
 
     # imporession de la clé privée
     keystore.write("[sec]\n" + args.id + ":DSA-Ed25519-SHA-512:" + sk + "\n")
+
+if args.export and args.id:
+    keystore = open("keystore", "a")
+    if args.export == 'pub' or args.export == 'sec':
+        print "affiche la clé " + args.export + " de " + args.id
+    else:
+        print args.export + " est une mauvaise option pour l'argument -export"
