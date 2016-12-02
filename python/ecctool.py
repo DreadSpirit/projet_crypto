@@ -1,5 +1,6 @@
 # coding=utf-8
 import argparse
+from os import urandom
 
 import ed25519
 
@@ -28,12 +29,16 @@ print(args)
 
 if args.genKey and args.id:
     # action à implémenter : appeler la fonction de géneration des clés qui stocke dans le keystore
-    print "géneration de clés"
-    print "id : " + args.id
+    print "géneration des clés pour " + args.id
 
-    fichier = open("keystore", "a")
-    # récuperation de la clé public
-    str = ed25519.publickey(32 * chr(0)).encode('hex')
+    keystore = open("keystore", "a")
+    # géneration de la clé publique et de la clé privée
 
-    # impression de la clé dans un fichier
-    fichier.write(args.id + ": " + str + "\n")
+    sk = urandom(256 / 8).encode('hex')
+    pk = ed25519.publickey(sk).encode('hex')
+
+    # impression de la clé publique
+    keystore.write("[pub]\n" + args.id + ":DSA-Ed25519-SHA-512:" + pk + "\n")
+
+    # imporession de la clé privée
+    keystore.write("[sec]\n" + args.id + ":DSA-Ed25519-SHA-512:" + sk + "\n")
