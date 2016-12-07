@@ -18,7 +18,7 @@ def getkey(id, type):
 
 def genKeys(id):
     keystore = open("keystore", "a")
-    # géneration de la clé publique et de la clé privée
+    # génération de la clé publique et de la clé privée
 
     sk = urandom(256 / 8).encode('hex')
     pk = ed25519.publickey(sk).encode('hex')
@@ -28,3 +28,8 @@ def genKeys(id):
 
     # imporession de la clé privée
     keystore.write("[sec]\n" + id + ":DSA-Ed25519-SHA-512:" + sk + "\n")
+
+def genPkBrut(id):
+    sk = getkey(id,'sec')
+    pk = ed25519.publickey(sk)
+    return pk
