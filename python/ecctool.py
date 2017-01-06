@@ -27,8 +27,9 @@ parser.add_argument('-export', dest='typeKey',
 parser.add_argument('-message', dest='message',
                     help='-message, signe un message entré en arg grâce à une sk et pk')
 
-parser.add_argument('-sign', dest='sign',
+parser.add_argument('-sign',  dest='sign',
                     help='-sign, vérifie si la signature entrée en arg est valide')
+
 
 parser.add_argument('-gensign', action='store_true',
                     help='génére une signature')
@@ -57,16 +58,19 @@ if args.message and args.id and args.gensign:
     sk = gk.getkey(args.id, 'sec')
     pk = gk.genPkBrut(args.id)
     sign = ed.signature(args.message,sk, pk)
+
     if sign:
         print sign.encode('hex')
+
 
 # Vérifie si la signature est valide
 if args.sign and args.message and args.id:
     sk = gk.getkey(args.id, 'sec')
     pk = gk.genPkBrut(args.id)
-    sign = ed.signature(args.message, sk, pk)
+    sign = str(args.sign).rstrip().decode('hex')
     try:
         ed.checkvalid(sign, args.message, pk)
         print "La signature est valide"
     except:
         print "La signature n'a pu être validée"
+
