@@ -3,21 +3,11 @@ import argparse
 import ed25519 as ed
 import gestionKeystore as gk
 
-# Déscription du script :
-# On utilise un parser pour manipuler les arguments qu'on obtient via un terminal.
-# C'est le point d'entrée de notre programme.
-# La doc (plutot bien faite) se trouve ici : https://docs.python.org/3/library/argparse.html
-# Pour utiliser le script, placez-vous dans le répertoire courant et taper :
-#   python ecctool.py -h  pour voir les commandes disponibles
-#   python -genkey -id alice pour tester
+parser = argparse.ArgumentParser(description='Génération de clés')
 
-# on met dans la variable parser, la librairie argparse
-parser = argparse.ArgumentParser(description='Génération de clés ... A compléter')
-
-# premier argument : genKey; Ne requière pas d'option; args.genKey = true si invoqué
 parser.add_argument('-genKey', action='store_true',
                     help='génére une paire de clés publique et privée ')
-# deuxième argument : id; Requière une option derrière: option requis pour executer la commande;
+
 parser.add_argument('-id', dest='id', required=True,
                     help='id de la personne')
 
@@ -25,10 +15,10 @@ parser.add_argument('-export', dest='typeKey',
                     help='-export [pub|sec], exporte la clé publique/privé')
 
 parser.add_argument('-message', dest='message',
-                    help='-message, signe un message entré en arg grâce à une sk et pk')
+                    help='-message message, signe un message entré en arg grâce à une sk et pk')
 
 parser.add_argument('-sign',  dest='sign',
-                    help='-sign, vérifie si la signature entrée en arg est valide')
+                    help='-sign signature, vérifie si la signature entrée en arg est valide')
 
 
 parser.add_argument('-gensign', action='store_true',
